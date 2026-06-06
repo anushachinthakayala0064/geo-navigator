@@ -35,6 +35,10 @@
                 id="destination"
                 placeholder="Enter Destination Location">
 
+            <select id="sourceOptions" style="display:none;"></select>
+
+<select id="destinationOptions" style="display:none;"></select>
+
             <button onclick="findRoute()">
                 Find Route
             </button>
@@ -44,6 +48,10 @@
         </button>
         <button onclick="toggleFullscreen()">
     ⛶ Full Screen
+</button>
+
+            <button onclick="searchLocations()">
+    Search Locations
 </button>
 
         </div>
