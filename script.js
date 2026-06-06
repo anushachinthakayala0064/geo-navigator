@@ -1,4 +1,6 @@
 // Initialize Map
+let sourceResults = [];
+let destinationResults = [];
 let map = L.map('map', {
     zoomControl: true
 }).setView([17.3850, 78.4867], 10);
@@ -62,18 +64,35 @@ async function findRoute() {
             return;
         }
 
-        let sLat =
-            parseFloat(sourceData[0].lat);
+        let sourceIndex =
+document.getElementById(
+"sourceOptions"
+).value || 0;
 
-        let sLon =
-            parseFloat(sourceData[0].lon);
+let destinationIndex =
+document.getElementById(
+"destinationOptions"
+).value || 0;
 
-        let dLat =
-            parseFloat(destinationData[0].lat);
+let sLat =
+parseFloat(
+sourceResults[sourceIndex].lat
+);
 
-        let dLon =
-            parseFloat(destinationData[0].lon);
+let sLon =
+parseFloat(
+sourceResults[sourceIndex].lon
+);
 
+let dLat =
+parseFloat(
+destinationResults[destinationIndex].lat
+);
+
+let dLon =
+parseFloat(
+destinationResults[destinationIndex].lon
+);
         // Remove Previous Markers
 
         if (sourceMarker) {
@@ -228,4 +247,62 @@ function toggleFullscreen() {
 
         document.exitFullscreen();
     }
+}
+async function searchLocations() {
+
+    const source =
+        document.getElementById("source").value;
+
+    const destination =
+        document.getElementById("destination").value;
+
+    const sourceResponse =
+        await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${source}`
+        );
+
+    sourceResults =
+        await sourceResponse.json();
+
+    const sourceDropdown =
+        document.getElementById("sourceOptions");
+
+    sourceDropdown.innerHTML = "";
+
+    sourceResults.forEach((location, index) => {
+
+        sourceDropdown.innerHTML +=
+        `<option value="${index}">
+            ${location.display_name}
+        </option>`;
+
+    });
+
+    sourceDropdown.style.display = "block";
+
+
+
+    const destinationResponse =
+        await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${destination}`
+        );
+
+    destinationResults =
+        await destinationResponse.json();
+
+    const destinationDropdown =
+        document.getElementById("destinationOptions");
+
+    destinationDropdown.innerHTML = "";
+
+    destinationResults.forEach((location, index) => {
+
+        destinationDropdown.innerHTML +=
+        `<option value="${index}">
+            ${location.display_name}
+        </option>`;
+
+    });
+
+    destinationDropdown.style.display = "block";
 }
